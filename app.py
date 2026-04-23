@@ -12,10 +12,17 @@ app.secret_key = "quiz_secret_key_2024_ultra_secure"
 # ============================================================
 # DATABASE SETUP
 # ============================================================
+# Use /tmp for Vercel deployment (serverless), otherwise use project root
+DB_PATH = os.environ.get("VERCEL") and "/tmp/quiz.db" or "quiz.db"
+
 def init_db():
     """Initialize database with full schema"""
-    conn = sqlite3.connect("quiz.db")
-    c = conn.cursor()
+    try:
+        conn = sqlite3.connect(DB_PATH)
+        c = conn.cursor()
+    except sqlite3.OperationalError as e:
+        print(f"Warning: Could not connect to database at {DB_PATH}: {e}")
+        return
 
     # Users table
     c.execute("""
@@ -63,7 +70,10 @@ def init_db():
     conn.commit()
     conn.close()
 
-init_db()
+try:
+    init_db()
+except Exception as e:
+    print(f"Warning: Database initialization failed: {e}")
 
 # ============================================================
 # QUIZ CATEGORIES
@@ -175,7 +185,7 @@ QUIZ_CATEGORIES = {
 # HELPERS
 # ============================================================
 def get_db_connection():
-    conn = sqlite3.connect("quiz.db")
+    conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
     return conn
 
