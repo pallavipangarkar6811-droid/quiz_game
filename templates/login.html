@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Quiz Master</title>
+    <meta name="description" content="Log in to Quiz Master and continue your quiz adventure!">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        /* ---- Auth container variant ---- */
+        .auth-container {
+            max-width: 460px;
+            padding: 48px 44px;
+        }
+
+        /* ---- Logo/Brand header ---- */
+        .auth-brand {
+            text-align: center;
+            margin-bottom: 36px;
+        }
+
+        .brand-logo {
+            font-size: 3em;
+            display: block;
+            margin-bottom: 8px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .brand-title {
+            font-size: 1.9em;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.5px;
+            margin-bottom: 4px;
+        }
+
+        .brand-tagline {
+            color: #aaa;
+            font-size: 0.9em;
+        }
+
+        /* ---- Section label ---- */
+        .auth-heading {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: #1e1e2e;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+
+        /* ---- Error alert ---- */
+        .alert-error {
+            background: #fff0f0;
+            border: 1.5px solid #fca5a5;
+            border-radius: 10px;
+            padding: 13px 16px;
+            color: #b91c1c;
+            font-size: 0.92em;
+            font-weight: 600;
+            margin-bottom: 22px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            animation: slideInUp 0.3s ease;
+        }
+
+        /* ---- Form group ---- */
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 7px;
+            color: #374151;
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.1em;
+            pointer-events: none;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 13px 16px 13px 42px;
+            border: 2px solid #e4e4f0;
+            border-radius: 10px;
+            font-size: 0.97em;
+            font-family: 'Inter', sans-serif;
+            color: #1e1e2e;
+            background: #fafafa;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #667eea;
+            background: #fff;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.12);
+        }
+
+        .form-input::placeholder {
+            color: #c0c0d0;
+        }
+
+        /* ---- Password toggle ---- */
+        .pw-toggle {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            font-size: 1em;
+            color: #aaa;
+            background: none;
+            border: none;
+            padding: 4px;
+            box-shadow: none;
+            transition: color 0.2s ease;
+        }
+
+        .pw-toggle:hover {
+            color: #667eea;
+            transform: translateY(-50%);
+            box-shadow: none;
+        }
+
+        /* ---- Submit button ---- */
+        .btn-auth {
+            width: 100%;
+            padding: 14px;
+            font-size: 1.05em;
+            font-weight: 700;
+            border-radius: 10px;
+            margin-top: 6px;
+            letter-spacing: 0.3px;
+        }
+
+        /* ---- Divider ---- */
+        .auth-divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 22px 0;
+        }
+
+        .auth-divider::before,
+        .auth-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #e4e4f0;
+        }
+
+        .auth-divider span {
+            color: #bbb;
+            font-size: 0.82em;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        /* ---- Footer link ---- */
+        .auth-footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.9em;
+            color: #999;
+        }
+
+        .auth-footer a {
+            color: #667eea;
+            font-weight: 700;
+            border: none;
+            padding: 0;
+            display: inline;
+            text-decoration: underline;
+        }
+
+        .auth-footer a:hover {
+            color: #764ba2;
+            background: none;
+            transform: none;
+        }
+
+        /* ---- Leaderboard quick-link ---- */
+        .guest-link {
+            display: block;
+            text-align: center;
+            margin-top: 14px;
+            font-size: 0.85em;
+            color: #bbb;
+        }
+
+        .guest-link a {
+            color: #aaa;
+            border: none;
+            padding: 0;
+            display: inline;
+            font-weight: 600;
+        }
+
+        .guest-link a:hover {
+            color: #667eea;
+            background: none;
+            transform: none;
+        }
+
+        /* ---- Responsive ---- */
+        @media (max-width: 520px) {
+            .auth-container {
+                padding: 34px 24px;
+            }
+
+            .brand-title {
+                font-size: 1.6em;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container auth-container">
+        <!-- Brand -->
+        <div class="auth-brand">
+            <span class="brand-logo">🎯</span>
+            <div class="brand-title">Quiz Master</div>
+            <div class="brand-tagline">Challenge Your Knowledge</div>
+        </div>
+
+        <div class="auth-heading">Welcome back 👋</div>
+
+        <!-- Error Alert -->
+        {% if error %}
+        <div class="alert-error" id="errorAlert">
+            <span>⚠️</span>
+            <span>{{ error }}</span>
+        </div>
+        {% endif %}
+
+        <!-- Login Form -->
+        <form method="post" id="loginForm" novalidate>
+            <div class="form-group">
+                <label class="form-label" for="username">Username</label>
+                <div class="input-wrapper">
+                    <span class="input-icon">👤</span>
+                    <input class="form-input" type="text" id="username" name="username"
+                        placeholder="Enter your username" value="{{ saved_username or '' }}" required
+                        autocomplete="username" autofocus>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="password">Password</label>
+                <div class="input-wrapper">
+                    <span class="input-icon">🔒</span>
+                    <input class="form-input" type="password" id="password" name="password"
+                        placeholder="Enter your password" required autocomplete="current-password">
+                    <button type="button" class="pw-toggle" id="pwToggle" title="Show password">👁️</button>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-auth" id="loginBtn">Sign In 🚀</button>
+        </form>
+
+        <div class="auth-divider"><span>OR</span></div>
+
+        <div class="auth-footer">
+            Don't have an account?
+            <a href="/register">Create one free →</a>
+        </div>
+
+        <div class="guest-link">
+            <a href="/leaderboard">📊 View Leaderboard as Guest</a>
+        </div>
+    </div>
+
+    <script>
+        // Password visibility toggle
+        const pwToggle = document.getElementById('pwToggle');
+        const pwInput = document.getElementById('password');
+
+        pwToggle.addEventListener('click', function () {
+            const isHidden = pwInput.type === 'password';
+            pwInput.type = isHidden ? 'text' : 'password';
+            pwToggle.textContent = isHidden ? '🙈' : '👁️';
+        });
+
+        // Loading state on submit
+        document.getElementById('loginForm').addEventListener('submit', function (e) {
+            const username = document.getElementById('username').value.trim();
+            const password = pwInput.value;
+
+            if (!username || !password) {
+                e.preventDefault();
+                return;
+            }
+
+            const btn = document.getElementById('loginBtn');
+            btn.disabled = true;
+            btn.textContent = 'Signing in…';
+        });
+
+        // Auto-dismiss error after 6s
+        const alert = document.getElementById('errorAlert');
+        if (alert) {
+            setTimeout(() => {
+                alert.style.transition = 'opacity 0.4s ease';
+                alert.style.opacity = '0';
+                setTimeout(() => alert.remove(), 400);
+            }, 6000);
+        }
+    </script>
+</body>
+
+</html>

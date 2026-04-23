@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Category Stats - Quiz Master</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        .stats-header {
+            text-align: center;
+            margin-bottom: 36px;
+        }
+
+        .category-icon {
+            font-size: 3em;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .stats-header p {
+            color: #aaa;
+            margin-top: 6px;
+        }
+
+        /* ---- Stats Grid ---- */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .stat-box {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.08), rgba(118, 75, 162, 0.08));
+            border: 2px solid #e4e4f0;
+            border-radius: 14px;
+            padding: 28px 16px;
+            text-align: center;
+            transition: all 0.25s ease;
+        }
+
+        .stat-box:hover {
+            border-color: #667eea;
+            transform: translateY(-5px);
+            box-shadow: 0 8px 24px rgba(102, 126, 234, 0.2);
+        }
+
+        .stat-number {
+            font-size: 2.4em;
+            font-weight: 800;
+            color: #667eea;
+            margin-bottom: 8px;
+            line-height: 1;
+        }
+
+        .stat-name {
+            color: #999;
+            font-size: 0.82em;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* ---- Empty state ---- */
+        .empty-state {
+            text-align: center;
+            padding: 48px 20px;
+            background: #f8f8fc;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+
+        .empty-icon {
+            font-size: 3.5em;
+            margin-bottom: 14px;
+            display: block;
+        }
+
+        /* ---- Action buttons ---- */
+        .action-buttons {
+            display: flex;
+            gap: 14px;
+            justify-content: center;
+            margin-top: 32px;
+            flex-wrap: wrap;
+        }
+
+        .action-buttons a {
+            padding: 12px 26px;
+            font-weight: 700;
+            border-radius: 10px;
+            font-size: 0.97em;
+        }
+
+        /* ---- Responsive ---- */
+        @media (max-width: 640px) {
+            .stats-container {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .stat-box {
+                padding: 22px 16px;
+            }
+
+            .stat-number {
+                font-size: 2em;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .action-buttons a {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="stats-header">
+            <span class="category-icon">{{ category_emoji }}</span>
+            <h1>{{ category_name }} Stats</h1>
+            <p>Category Performance Analytics</p>
+        </div>
+
+        <div class="stats-container">
+            <div class="stat-box">
+                <div class="stat-number">{{ stats.total_plays }}</div>
+                <div class="stat-name">Total Plays</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number">{{ "%.1f"|format(stats.avg_score) }}</div>
+                <div class="stat-name">Average Score</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number">{{ stats.best_score }}</div>
+                <div class="stat-name">Best Score</div>
+            </div>
+        </div>
+
+        {% if stats.total_plays == 0 %}
+        <div class="empty-state">
+            <span class="empty-icon">📊</span>
+            <p style="color: #666; font-size: 1.05em;">No data available yet</p>
+            <p style="color: #bbb; margin-top: 8px;">Be the first to take this quiz!</p>
+        </div>
+        {% endif %}
+
+        <div class="action-buttons">
+            <a href="/leaderboard"
+                style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-color: transparent; box-shadow: 0 4px 14px rgba(102,126,234,0.4);">📊
+                Leaderboard</a>
+            <a href="/">🏠 Home</a>
+        </div>
+    </div>
+</body>
+
+</html>

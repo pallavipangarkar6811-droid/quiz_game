@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Quiz Master</title>
+    <meta name="description" content="Create your free Quiz Master account and start competing!">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        .auth-container {
+            max-width: 480px;
+            padding: 44px 44px;
+        }
+
+        .auth-brand {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .brand-logo {
+            font-size: 2.8em;
+            display: block;
+            margin-bottom: 6px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .brand-title {
+            font-size: 1.75em;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.5px;
+        }
+
+        .auth-heading {
+            font-size: 1.2em;
+            font-weight: 700;
+            color: #1e1e2e;
+            margin-bottom: 22px;
+            text-align: center;
+        }
+
+        /* ---- Error / success alerts ---- */
+        .alert-error {
+            background: #fff0f0;
+            border: 1.5px solid #fca5a5;
+            border-radius: 10px;
+            padding: 12px 16px;
+            color: #b91c1c;
+            font-size: 0.91em;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            animation: slideInUp 0.3s ease;
+        }
+
+        /* ---- Two-column row ---- */
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 6px;
+            color: #374151;
+            font-weight: 600;
+            font-size: 0.88em;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 13px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1em;
+            pointer-events: none;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 15px 12px 40px;
+            border: 2px solid #e4e4f0;
+            border-radius: 10px;
+            font-size: 0.95em;
+            font-family: 'Inter', sans-serif;
+            color: #1e1e2e;
+            background: #fafafa;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #667eea;
+            background: #fff;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.12);
+        }
+
+        .form-input::placeholder {
+            color: #c0c0d0;
+        }
+
+        .form-input.valid {
+            border-color: #4ade80;
+        }
+
+        .form-input.invalid {
+            border-color: #f87171;
+        }
+
+        /* ---- Password toggle ---- */
+        .pw-toggle {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 4px;
+            box-shadow: none;
+            font-size: 1em;
+            color: #aaa;
+            transition: color 0.2s ease;
+        }
+
+        .pw-toggle:hover {
+            color: #667eea;
+            transform: translateY(-50%);
+            box-shadow: none;
+        }
+
+        /* ---- Password strength ---- */
+        .strength-bar {
+            height: 4px;
+            border-radius: 2px;
+            background: #e4e4f0;
+            margin-top: 6px;
+            overflow: hidden;
+        }
+
+        .strength-fill {
+            height: 100%;
+            border-radius: 2px;
+            width: 0%;
+            transition: width 0.4s ease, background 0.4s ease;
+        }
+
+        .strength-label {
+            font-size: 0.78em;
+            margin-top: 4px;
+            font-weight: 600;
+            color: #aaa;
+        }
+
+        /* ---- Field hint ---- */
+        .field-hint {
+            font-size: 0.78em;
+            color: #bbb;
+            margin-top: 4px;
+        }
+
+        /* ---- Terms checkbox ---- */
+        .terms-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin: 14px 0 18px;
+        }
+
+        .terms-row input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            margin-top: 2px;
+            flex-shrink: 0;
+            accent-color: #667eea;
+            cursor: pointer;
+        }
+
+        .terms-row label {
+            color: #666;
+            font-size: 0.88em;
+            line-height: 1.5;
+            cursor: pointer;
+            font-weight: 400;
+        }
+
+        /* ---- Submit ---- */
+        .btn-auth {
+            width: 100%;
+            padding: 14px;
+            font-size: 1.02em;
+            font-weight: 700;
+            border-radius: 10px;
+            letter-spacing: 0.3px;
+        }
+
+        /* ---- Divider ---- */
+        .auth-divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .auth-divider::before,
+        .auth-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #e4e4f0;
+        }
+
+        .auth-divider span {
+            color: #bbb;
+            font-size: 0.82em;
+            font-weight: 600;
+        }
+
+        /* ---- Footer ---- */
+        .auth-footer {
+            text-align: center;
+            margin-top: 18px;
+            font-size: 0.9em;
+            color: #999;
+        }
+
+        .auth-footer a {
+            color: #667eea;
+            font-weight: 700;
+            border: none;
+            padding: 0;
+            display: inline;
+            text-decoration: underline;
+        }
+
+        .auth-footer a:hover {
+            color: #764ba2;
+            background: none;
+            transform: none;
+        }
+
+        /* ---- Perks strip ---- */
+        .perks {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 22px;
+            flex-wrap: wrap;
+        }
+
+        .perk {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.82em;
+            color: #888;
+            font-weight: 600;
+        }
+
+        /* ---- Responsive ---- */
+        @media (max-width: 520px) {
+            .auth-container {
+                padding: 30px 20px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+
+            .perks {
+                gap: 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container auth-container">
+        <!-- Brand -->
+        <div class="auth-brand">
+            <span class="brand-logo">🎯</span>
+            <div class="brand-title">Quiz Master</div>
+        </div>
+
+        <!-- Perks -->
+        <div class="perks">
+            <div class="perk">✅ Free forever</div>
+            <div class="perk">🏆 Climb leaderboards</div>
+            <div class="perk">📊 Track your scores</div>
+        </div>
+
+        <div class="auth-heading">Create your account</div>
+
+        <!-- Error Alert -->
+        {% if error %}
+        <div class="alert-error" id="errorAlert">
+            <span>⚠️</span>
+            <span>{{ error }}</span>
+        </div>
+        {% endif %}
+
+        <!-- Register Form -->
+        <form method="post" id="registerForm" novalidate>
+
+            <div class="form-group">
+                <label class="form-label" for="username">Username</label>
+                <div class="input-wrapper">
+                    <span class="input-icon">👤</span>
+                    <input class="form-input" type="text" id="username" name="username"
+                        placeholder="Pick a cool username" value="{{ form_data.get('username', '') }}" required
+                        minlength="3" maxlength="30" autocomplete="username" autofocus>
+                </div>
+                <div class="field-hint">3–30 characters, shown on the leaderboard</div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="email">Email Address</label>
+                <div class="input-wrapper">
+                    <span class="input-icon">✉️</span>
+                    <input class="form-input" type="email" id="email" name="email" placeholder="you@example.com"
+                        value="{{ form_data.get('email', '') }}" required autocomplete="email">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label" for="password">Password</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">🔒</span>
+                        <input class="form-input" type="password" id="password" name="password"
+                            placeholder="Min 6 characters" required minlength="6" autocomplete="new-password">
+                        <button type="button" class="pw-toggle" id="pwToggle1" title="Show password">👁️</button>
+                    </div>
+                    <div class="strength-bar">
+                        <div class="strength-fill" id="strengthFill"></div>
+                    </div>
+                    <div class="strength-label" id="strengthLabel">Password strength</div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="confirm_password">Confirm Password</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">🔑</span>
+                        <input class="form-input" type="password" id="confirm_password" name="confirm_password"
+                            placeholder="Repeat password" required autocomplete="new-password">
+                        <button type="button" class="pw-toggle" id="pwToggle2" title="Show password">👁️</button>
+                    </div>
+                    <div class="field-hint" id="matchHint"></div>
+                </div>
+            </div>
+
+            <div class="terms-row">
+                <input type="checkbox" id="terms" name="terms" required>
+                <label for="terms">
+                    I agree to the <strong>Terms of Service</strong> and confirm I'm at least 13 years old.
+                </label>
+            </div>
+
+            <button type="submit" class="btn-auth" id="registerBtn">Create Account 🎉</button>
+        </form>
+
+        <div class="auth-divider"><span>ALREADY HAVE AN ACCOUNT?</span></div>
+
+        <div class="auth-footer">
+            <a href="/login">← Sign in instead</a>
+        </div>
+    </div>
+
+    <script>
+        // ---- Password visibility toggles ----
+        function setupToggle(btnId, inputId) {
+            document.getElementById(btnId).addEventListener('click', function () {
+                const input = document.getElementById(inputId);
+                const show = input.type === 'password';
+                input.type = show ? 'text' : 'password';
+                this.textContent = show ? '🙈' : '👁️';
+            });
+        }
+        setupToggle('pwToggle1', 'password');
+        setupToggle('pwToggle2', 'confirm_password');
+
+        // ---- Password strength meter ----
+        const pwInput = document.getElementById('password');
+        const fillEl = document.getElementById('strengthFill');
+        const labelEl = document.getElementById('strengthLabel');
+
+        const levels = [
+            { min: 0, pct: '0%', color: '#e4e4f0', label: 'Password strength' },
+            { min: 1, pct: '25%', color: '#ef4444', label: '⚠️ Weak' },
+            { min: 6, pct: '55%', color: '#fbbf24', label: '🔶 Fair' },
+            { min: 9, pct: '80%', color: '#4ade80', label: '✅ Good' },
+            { min: 13, pct: '100%', color: '#22c55e', label: '💪 Strong' },
+        ];
+
+        function hasUpper(s) { return /[A-Z]/.test(s); }
+        function hasNumber(s) { return /[0-9]/.test(s); }
+        function hasSymbol(s) { return /[^A-Za-z0-9]/.test(s); }
+
+        pwInput.addEventListener('input', function () {
+            const val = this.value;
+            let score = val.length;
+            if (hasUpper(val)) score += 2;
+            if (hasNumber(val)) score += 2;
+            if (hasSymbol(val)) score += 3;
+
+            let level = levels[0];
+            for (const l of levels) {
+                if (score >= l.min) level = l;
+            }
+
+            fillEl.style.width = level.pct;
+            fillEl.style.background = level.color;
+            labelEl.textContent = level.label;
+            labelEl.style.color = level.color === '#e4e4f0' ? '#ccc' : level.color;
+        });
+
+        // ---- Confirm password match indicator ----
+        const confirmInput = document.getElementById('confirm_password');
+        const matchHint = document.getElementById('matchHint');
+
+        confirmInput.addEventListener('input', function () {
+            if (!this.value) {
+                matchHint.textContent = '';
+                this.classList.remove('valid', 'invalid');
+                return;
+            }
+            const match = this.value === pwInput.value;
+            matchHint.textContent = match ? '✅ Passwords match' : '❌ Passwords do not match';
+            matchHint.style.color = match ? '#22c55e' : '#ef4444';
+            this.classList.toggle('valid', match);
+            this.classList.toggle('invalid', !match);
+        });
+
+        // ---- Form submit with client-side validation ----
+        document.getElementById('registerForm').addEventListener('submit', function (e) {
+            const username = document.getElementById('username').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const pw = pwInput.value;
+            const confirm = confirmInput.value;
+            const terms = document.getElementById('terms').checked;
+
+            if (!username || username.length < 3) {
+                e.preventDefault();
+                alert('Username must be at least 3 characters.');
+                return;
+            }
+            if (!email || !email.includes('@')) {
+                e.preventDefault();
+                alert('Please enter a valid email address.');
+                return;
+            }
+            if (pw.length < 6) {
+                e.preventDefault();
+                alert('Password must be at least 6 characters.');
+                return;
+            }
+            if (pw !== confirm) {
+                e.preventDefault();
+                alert('Passwords do not match.');
+                return;
+            }
+            if (!terms) {
+                e.preventDefault();
+                alert('Please agree to the Terms of Service.');
+                return;
+            }
+
+            const btn = document.getElementById('registerBtn');
+            btn.disabled = true;
+            btn.textContent = 'Creating account…';
+        });
+
+        // ---- Auto-dismiss error ----
+        const alert = document.getElementById('errorAlert');
+        if (alert) {
+            setTimeout(() => {
+                alert.style.transition = 'opacity 0.4s ease';
+                alert.style.opacity = '0';
+                setTimeout(() => alert.remove(), 400);
+            }, 7000);
+        }
+    </script>
+</body>
+
+</html>

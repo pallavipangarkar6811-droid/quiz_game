@@ -1,0 +1,11 @@
+import sqlite3
+conn = sqlite3.connect("quiz.db")
+c = conn.cursor()
+c.execute("SELECT name FROM sqlite_master WHERE type='table'")
+print("Tables:", [r[0] for r in c.fetchall()])
+c.execute("PRAGMA table_info(users)")
+print("Users cols:", [r[1] for r in c.fetchall()])
+c.execute("PRAGMA table_info(scores)")
+print("Scores cols:", [r[1] for r in c.fetchall()])
+conn.close()
+print("DB check OK!")
