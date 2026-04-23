@@ -5,9 +5,15 @@
     "PYTHON_VERSION": "3.11"
   },
   "functions": {
-    "app.py": {
+    "api/index.py": {
       "memory": 1024,
       "maxDuration": 60
     }
-  }
+  },
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "api/index.py"
+    }
+  ]
 }
